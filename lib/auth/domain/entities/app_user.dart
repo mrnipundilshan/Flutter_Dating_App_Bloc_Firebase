@@ -11,7 +11,6 @@ class AppUser {
   }
 
   // convert json -> app user
-
   factory AppUser.fromJson(Map<String, dynamic> jsonUser) {
     return AppUser(
       uid: jsonUser['uid'],
