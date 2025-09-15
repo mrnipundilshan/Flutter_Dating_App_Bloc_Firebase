@@ -11,6 +11,37 @@ class FirebaseAuthRepo implements AuthRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
+  Future<AppUser?> registerWithEmailAndPassword(
+    String name,
+    String email,
+    String password,
+  ) async {
+    try {
+      // attempt tot sign up
+      UserCredential userCredential = await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      // create user
+      AppUser user = AppUser(
+        uid: userCredential.user!.uid,
+        email: email,
+        name: name,
+      );
+
+      // save user data in firestore
+      await firebaseFirestore
+          .collection('users')
+          .doc(user.uid)
+          .set(user.toJson());
+
+      // return user
+      return user;
+    } catch (e) {
+      throw Exception("Sign Up failed :$e");
+    }
+  }
+
+  @override
   Future<AppUser?> loginWithEmailAndPassword(
     String email,
     String password,
@@ -42,24 +73,37 @@ class FirebaseAuthRepo implements AuthRepository {
   }
 
   @override
-  Future<AppUser?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<AppUser?> getCurrentUser() async {
+    // get current logged in user from firebase
+    final firebaseUser = firebaseAuth.currentUser;
+
+    // if no user logged in
+    if (firebaseUser == null) {
+      return null;
+    }
+
+    // fetch user document from firebase
+    DocumentSnapshot userDoc = await firebaseFirestore
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .get();
+
+    // check if user doc exists
+    if (!userDoc.exists) {
+      return null;
+    }
+
+    // user exists
+    return AppUser(
+      uid: firebaseUser.uid,
+      email: firebaseUser.email!,
+      name: userDoc['name'],
+    );
   }
 
   @override
   Future<void> logout() {
     // TODO: implement logout
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<AppUser?> registerWithEmailAndPassword(
-    String name,
-    String email,
-    String password,
-  ) {
-    // TODO: implement registerWithEmailAndPassword
     throw UnimplementedError();
   }
 }
