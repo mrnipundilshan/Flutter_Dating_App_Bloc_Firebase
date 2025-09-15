@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "509505551089",
+    "project_id": "datingapp-7846f",
+    "storage_bucket": "datingapp-7846f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509505551089:android:c56c574c8eb901cbed4750",
+        "android_client_info": {
+          "package_name": "com.example.datingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr48A14X1xU626pyF8Op11-f8xtuRdD9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
