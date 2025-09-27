@@ -25,3 +25,5 @@ class LoginButtonClickedEvent extends AuthEvent {
 }
 
 class LogOutButtonClickedEvent extends AuthEvent {}
+
+class GetCurrentUserEvent extends AuthEvent {}

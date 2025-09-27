@@ -9,15 +9,33 @@ import 'package:meta/meta.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AurhBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepository authRepository;
   AppUser? _currentUser;
 
-  AurhBloc({required this.authRepository}) : super(AurhInitial()) {
+  AuthBloc({required this.authRepository}) : super(AurhInitial()) {
     on<RegisterButtonClickedEvent>(registerButtonClickedEvent);
+    on<LoginButtonClickedEvent>(loginButtonClickedEvent);
+    on<LogOutButtonClickedEvent>(logOutButtonClickedEvent);
+    on<GetCurrentUserEvent>(getCurrentUserEvent);
   }
 
-  // register with email + paswword
+  // check if user already authenticated
+  Future<void> getCurrentUserEvent(GetCurrentUserEvent event, emit) async {
+    final AppUser? user = await authRepository.getCurrentUser();
+
+    if (user != null) {
+      _currentUser = user;
+      emit(Authenticated(user));
+    } else {
+      emit(Unauthenticated());
+    }
+  }
+
+  // get current user
+  AppUser? get currentUser => _currentUser;
+
+  // register with email + paswword + name
   Future<void> registerButtonClickedEvent(
     RegisterButtonClickedEvent event,
     emit,
@@ -41,5 +59,39 @@ class AurhBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthError(e.toString()));
       emit(Unauthenticated());
     }
+  }
+
+  // login with email + password
+  Future<void> loginButtonClickedEvent(
+    LoginButtonClickedEvent event,
+    emit,
+  ) async {
+    try {
+      emit(AuthLoading());
+
+      final user = await authRepository.loginWithEmailAndPassword(
+        event.email,
+        event.password,
+      );
+
+      if (user != null) {
+        _currentUser = user;
+        emit(Authenticated(user));
+      } else {
+        Unauthenticated();
+      }
+    } catch (e) {
+      emit(AuthError(e.toString()));
+      emit(Unauthenticated());
+    }
+  }
+
+  // log out
+  Future<void> logOutButtonClickedEvent(
+    LogOutButtonClickedEvent event,
+    emit,
+  ) async {
+    authRepository.logout();
+    emit(Unauthenticated());
   }
 }
