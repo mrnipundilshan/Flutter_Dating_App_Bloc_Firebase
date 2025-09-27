@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:datingapp/auth/domain/entities/app_user.dart';
-import 'package:datingapp/auth/domain/repository/auth_repository.dart';
+import 'package:datingapp/features/auth/domain/entities/app_user.dart';
+import 'package:datingapp/features/auth/domain/repository/auth_repository.dart';
 
 import 'package:meta/meta.dart';
 

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:datingapp/auth/domain/entities/app_user.dart';
-import 'package:datingapp/auth/domain/repository/auth_repository.dart';
+import 'package:datingapp/features/auth/domain/entities/app_user.dart';
+import 'package:datingapp/features/auth/domain/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthRepo implements AuthRepository {

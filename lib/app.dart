@@ -1,7 +1,7 @@
-import 'package:datingapp/auth/data/firebase_auth_repo.dart';
-import 'package:datingapp/auth/home/home_page.dart';
-import 'package:datingapp/auth/presentation/pages/auth_page.dart';
-import 'package:datingapp/auth/presentation/pages/bloc/auth_bloc.dart';
+import 'package:datingapp/features/auth/data/firebase_auth_repo.dart';
+import 'package:datingapp/features/home/home_page.dart';
+import 'package:datingapp/features/auth/presentation/pages/auth_page.dart';
+import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // <-- important
 
