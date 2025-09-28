@@ -11,20 +11,34 @@ class RegisterPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Join Lovify Today ✨",
-              style: GoogleFonts.patrickHand(
-                textStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: width * 0.09,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Join Lovify Today ✨",
+                style: GoogleFonts.patrickHand(
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: width * 0.09,
+                  ),
                 ),
               ),
-            ),
-          ],
+              Text(
+                "Create your account and start sparking connections today!",
+                style: GoogleFonts.patrickHand(
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+
+                    fontSize: width * 0.05,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
