@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 class MyTextfield extends StatelessWidget {
   final TextEditingController controller;
   final IconData prefixIcon;
+  final IconData? suffixIcon;
   final String hintText;
   final bool obscureText;
   const MyTextfield({
     super.key,
     required this.controller,
     required this.prefixIcon,
+    this.suffixIcon,
     required this.hintText,
     required this.obscureText,
   });
@@ -36,6 +38,8 @@ class MyTextfield extends StatelessWidget {
           ),
         ),
         prefixIcon: Opacity(opacity: 0.5, child: Icon(prefixIcon)),
+
+        suffixIcon: Opacity(opacity: 0.5, child: Icon(suffixIcon)),
 
         fillColor: Theme.of(context).colorScheme.tertiary.withAlpha(60),
         filled: true,

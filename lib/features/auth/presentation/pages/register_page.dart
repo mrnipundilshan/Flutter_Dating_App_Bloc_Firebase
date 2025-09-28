@@ -51,6 +51,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(height: height * 0.02),
+
+              // name
               Text(
                 "Name",
                 style: GoogleFonts.patrickHand(
@@ -69,6 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               SizedBox(height: height * 0.02),
+
+              // email
               Text(
                 "Email",
                 style: GoogleFonts.patrickHand(
@@ -82,11 +86,14 @@ class _RegisterPageState extends State<RegisterPage> {
               MyTextfield(
                 controller: emailTextController,
                 prefixIcon: CupertinoIcons.mail,
+
                 hintText: "Email",
                 obscureText: false,
               ),
 
               SizedBox(height: height * 0.02),
+
+              // password
               Text(
                 "Password",
                 style: GoogleFonts.patrickHand(
@@ -100,12 +107,14 @@ class _RegisterPageState extends State<RegisterPage> {
               MyTextfield(
                 controller: passwordTextController,
                 prefixIcon: CupertinoIcons.lock,
+                suffixIcon: CupertinoIcons.eye,
                 hintText: "Password",
                 obscureText: true,
               ),
 
               SizedBox(height: height * 0.02),
 
+              // confirm password
               Text(
                 "Confirm Password",
                 style: GoogleFonts.patrickHand(
@@ -119,6 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
               MyTextfield(
                 controller: confirmPasswordTextController,
                 prefixIcon: CupertinoIcons.lock,
+                suffixIcon: CupertinoIcons.eye,
                 hintText: "Confirm Password",
                 obscureText: true,
               ),
