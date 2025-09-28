@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyTextfield extends StatelessWidget {
   final TextEditingController controller;
+  final IconData prefixIcon;
   final String hintText;
   final bool obscureText;
   const MyTextfield({
     super.key,
     required this.controller,
+    required this.prefixIcon,
     required this.hintText,
     required this.obscureText,
   });
@@ -34,7 +35,7 @@ class MyTextfield extends StatelessWidget {
             fontSize: width * 0.05,
           ),
         ),
-        prefixIcon: Opacity(opacity: 0.5, child: Icon(CupertinoIcons.mail)),
+        prefixIcon: Opacity(opacity: 0.5, child: Icon(prefixIcon)),
 
         fillColor: Theme.of(context).colorScheme.tertiary.withAlpha(60),
         filled: true,
