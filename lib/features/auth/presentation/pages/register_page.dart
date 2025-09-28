@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController nameTextController = TextEditingController();
+  TextEditingController emailTextController = TextEditingController();
+  TextEditingController passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(),
@@ -37,6 +47,18 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: height * 0.02),
+              Text(
+                "Email",
+                style: GoogleFonts.patrickHand(
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: width * 0.05,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: height * 0.02),
             ],
           ),
         ),
