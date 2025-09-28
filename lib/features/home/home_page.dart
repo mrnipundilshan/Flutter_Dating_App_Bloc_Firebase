@@ -10,6 +10,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      backgroundColor: Color(0xFFFF3EA4), // <-- Use 0xFF + your hex code
+    );
   }
 }

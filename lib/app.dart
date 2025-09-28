@@ -1,4 +1,5 @@
 import 'package:datingapp/features/auth/data/firebase_auth_repo.dart';
+import 'package:datingapp/features/auth/presentation/pages/register_page.dart';
 import 'package:datingapp/features/home/home_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/auth_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
@@ -43,7 +44,7 @@ class MainApp extends StatelessWidget {
             } else if (state is AuthLoading) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return const AuthPage();
+              return const RegisterPage();
             }
           },
         ),
