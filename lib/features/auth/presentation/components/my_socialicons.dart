@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MySocialicons extends StatelessWidget {
-  final String asssetUrl;
+  final String assetUrl;
   final VoidCallback voidCallback;
   const MySocialicons({
     super.key,
-    required this.asssetUrl,
+    required this.assetUrl,
     required this.voidCallback,
   });
 
@@ -15,10 +15,24 @@ class MySocialicons extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      child: SvgPicture.asset(
-        asssetUrl,
-        width: width * 0.1, // optional
-        height: width * 0.1, // optional
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent, // optional background
+          borderRadius: BorderRadius.circular(40), // rounded corners
+          border: Border.all(
+            color: Theme.of(context).colorScheme.tertiary, // border color
+            width: 1, // border thickness
+          ),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: width * 0.05,
+          vertical: 8,
+        ), // optional padding inside the border
+        child: SvgPicture.asset(
+          assetUrl,
+          width: width * 0.07,
+          height: width * 0.07,
+        ),
       ),
     );
   }

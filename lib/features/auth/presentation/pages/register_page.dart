@@ -2,7 +2,6 @@ import 'package:datingapp/features/auth/presentation/components/my_socialicons.d
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -255,21 +254,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
               // social buttons
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   MySocialicons(
-                    asssetUrl: "assets/google.svg",
+                    assetUrl: "assets/google.svg",
                     voidCallback: () {},
                   ),
                   MySocialicons(
-                    asssetUrl: "assets/apple.svg",
+                    assetUrl: "assets/apple.svg",
                     voidCallback: () {},
                   ),
                   MySocialicons(
-                    asssetUrl: "assets/facebook.svg",
+                    assetUrl: "assets/facebook.svg",
                     voidCallback: () {},
                   ),
                   MySocialicons(
-                    asssetUrl: "assets/twitter.svg",
+                    assetUrl: "assets/twitter.svg",
                     voidCallback: () {},
                   ),
                 ],
