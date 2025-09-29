@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final void Function()? togglePages;
+  const RegisterPage({super.key, this.togglePages});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -27,187 +28,156 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(),
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Join Lovify Today ✨",
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Join Lovify Today ✨",
 
-                    style: GoogleFonts.patrickHand(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.09,
-                      ),
+                  style: GoogleFonts.patrickHand(
+                    textStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: width * 0.09,
                     ),
                   ),
                 ),
-                Text(
-                  "Create your account and start sparking connections today!",
+              ),
+              Text(
+                "Create your account and start sparking connections today!",
+                style: GoogleFonts.patrickHand(
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+
+                    fontSize: width * 0.05,
+                  ),
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+
+              // name
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Name",
                   style: GoogleFonts.patrickHand(
                     textStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
-
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: width * 0.05,
                     ),
                   ),
                 ),
-                SizedBox(height: height * 0.02),
+              ),
 
-                // name
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Name",
-                    style: GoogleFonts.patrickHand(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: width * 0.05,
-                      ),
+              MyTextfield(
+                controller: nameTextController,
+                prefixIcon: CupertinoIcons.person,
+                hintText: "Name",
+                obscureText: false,
+              ),
+
+              SizedBox(height: height * 0.01),
+
+              // email
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Email",
+                  style: GoogleFonts.patrickHand(
+                    textStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: width * 0.05,
                     ),
                   ),
                 ),
+              ),
 
-                MyTextfield(
-                  controller: nameTextController,
-                  prefixIcon: CupertinoIcons.person,
-                  hintText: "Name",
-                  obscureText: false,
-                ),
+              MyTextfield(
+                controller: emailTextController,
+                prefixIcon: CupertinoIcons.mail,
 
-                SizedBox(height: height * 0.01),
+                hintText: "Email",
+                obscureText: false,
+              ),
 
-                // email
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Email",
-                    style: GoogleFonts.patrickHand(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: width * 0.05,
-                      ),
+              SizedBox(height: height * 0.01),
+
+              // password
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Password",
+                  style: GoogleFonts.patrickHand(
+                    textStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: width * 0.05,
                     ),
                   ),
                 ),
+              ),
 
-                MyTextfield(
-                  controller: emailTextController,
-                  prefixIcon: CupertinoIcons.mail,
+              MyTextfield(
+                controller: passwordTextController,
+                prefixIcon: CupertinoIcons.lock,
+                suffixIcon: CupertinoIcons.eye,
+                hintText: "Password",
+                obscureText: true,
+              ),
 
-                  hintText: "Email",
-                  obscureText: false,
-                ),
+              SizedBox(height: height * 0.01),
 
-                SizedBox(height: height * 0.01),
-
-                // password
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Password",
-                    style: GoogleFonts.patrickHand(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: width * 0.05,
-                      ),
+              // confirm password
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Confirm Password",
+                  style: GoogleFonts.patrickHand(
+                    textStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: width * 0.05,
                     ),
                   ),
                 ),
+              ),
 
-                MyTextfield(
-                  controller: passwordTextController,
-                  prefixIcon: CupertinoIcons.lock,
-                  suffixIcon: CupertinoIcons.eye,
-                  hintText: "Password",
-                  obscureText: true,
-                ),
+              MyTextfield(
+                controller: confirmPasswordTextController,
+                prefixIcon: CupertinoIcons.lock,
+                suffixIcon: CupertinoIcons.eye,
+                hintText: "Confirm Password",
+                obscureText: true,
+              ),
 
-                SizedBox(height: height * 0.01),
+              SizedBox(height: height * 0.01),
 
-                // confirm password
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Confirm Password",
-                    style: GoogleFonts.patrickHand(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: width * 0.05,
-                      ),
-                    ),
-                  ),
-                ),
-
-                MyTextfield(
-                  controller: confirmPasswordTextController,
-                  prefixIcon: CupertinoIcons.lock,
-                  suffixIcon: CupertinoIcons.eye,
-                  hintText: "Confirm Password",
-                  obscureText: true,
-                ),
-
-                SizedBox(height: height * 0.01),
-
-                // terms and conditions
-                Transform.translate(
-                  offset: const Offset(-10, 0), // move checkbox left
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        side: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.secondary, // border always visible
-                          width: 2,
-                        ),
-                        value: checkBoxValue,
-                        onChanged: (bool? newValue) {
-                          setState(() {
-                            checkBoxValue = newValue;
-                          });
-                        },
-                      ),
-                      Text(
-                        "I agree to Lovify",
-                        style: GoogleFonts.patrickHand(
-                          textStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w100,
-                            fontSize: width * 0.05,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        child: Text(
-                          " Terms & Conditions.",
-                          style: GoogleFonts.patrickHand(
-                            textStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.w100,
-                              fontSize: width * 0.05,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // alread have an account
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              // terms and conditions
+              Transform.translate(
+                offset: const Offset(-10, 0), // move checkbox left
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Checkbox(
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      side: BorderSide(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.secondary, // border always visible
+                        width: 2,
+                      ),
+                      value: checkBoxValue,
+                      onChanged: (bool? newValue) {
+                        setState(() {
+                          checkBoxValue = newValue;
+                        });
+                      },
+                    ),
                     Text(
-                      "Already have an account?",
+                      "I agree to Lovify",
                       style: GoogleFonts.patrickHand(
                         textStyle: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
@@ -218,7 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     GestureDetector(
                       child: Text(
-                        " Sign in",
+                        " Terms & Conditions.",
                         style: GoogleFonts.patrickHand(
                           textStyle: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
@@ -230,104 +200,133 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ],
                 ),
-
-                SizedBox(height: height * 0.02),
-
-                // sign up button
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      Theme.of(context).colorScheme.secondary,
+              ),
+              // alread have an account
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w100,
+                        fontSize: width * 0.05,
+                      ),
                     ),
                   ),
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  GestureDetector(
+                    onTap: widget.togglePages,
                     child: Text(
-                      "Sign up",
+                      " Log In",
                       style: GoogleFonts.patrickHand(
                         textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: width * 0.08,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: height * 0.02),
-                // or continue with
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // left divider
-                    SizedBox(
-                      width: width * 0.3,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Divider(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          thickness: 1,
-                          endIndent: 8, // space between line and text
-                        ),
-                      ),
-                    ),
-
-                    // text in the middle
-                    Text(
-                      "or continue with",
-                      style: GoogleFonts.patrickHand(
-                        textStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary,
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.w100,
                           fontSize: width * 0.05,
                         ),
                       ),
                     ),
+                  ),
+                ],
+              ),
 
-                    // right divider
-                    SizedBox(
-                      width: width * 0.3,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Divider(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          thickness: 1,
-                          indent: 8, // space between text and line
-                        ),
+              SizedBox(height: height * 0.02),
+
+              // sign up button
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                onPressed: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Sign up",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: width * 0.08,
                       ),
                     ),
-                  ],
+                  ),
                 ),
+              ),
+              SizedBox(height: height * 0.02),
+              // or continue with
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // left divider
+                  SizedBox(
+                    width: width * 0.3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        thickness: 1,
+                        endIndent: 8, // space between line and text
+                      ),
+                    ),
+                  ),
 
-                SizedBox(height: height * 0.02),
+                  // text in the middle
+                  Text(
+                    "or continue with",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontSize: width * 0.05,
+                      ),
+                    ),
+                  ),
 
-                // social buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MySocialicons(
-                      assetUrl: "assets/google.svg",
-                      voidCallback: () {},
+                  // right divider
+                  SizedBox(
+                    width: width * 0.3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        thickness: 1,
+                        indent: 8, // space between text and line
+                      ),
                     ),
-                    MySocialicons(
-                      assetUrl: "assets/apple.svg",
-                      voidCallback: () {},
-                    ),
-                    MySocialicons(
-                      assetUrl: "assets/facebook.svg",
-                      voidCallback: () {},
-                    ),
-                    MySocialicons(
-                      assetUrl: "assets/twitter.svg",
-                      voidCallback: () {},
-                    ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
 
-                SizedBox(height: height * 0.07),
-              ],
-            ),
+              SizedBox(height: height * 0.02),
+
+              // social buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MySocialicons(
+                    assetUrl: "assets/google.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    assetUrl: "assets/apple.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    assetUrl: "assets/facebook.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    assetUrl: "assets/twitter.svg",
+                    voidCallback: () {},
+                  ),
+                ],
+              ),
+
+              SizedBox(height: height * 0.07),
+            ],
           ),
         ),
       ),

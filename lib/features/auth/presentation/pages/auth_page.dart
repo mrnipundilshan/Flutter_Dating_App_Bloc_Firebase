@@ -1,10 +1,31 @@
+import 'package:datingapp/features/auth/presentation/pages/login_page.dart';
+import 'package:datingapp/features/auth/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
   @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  // initially, show login page
+  bool showLoginPage = true;
+
+  // void togglePages
+  void togglePages() {
+    setState(() {
+      showLoginPage = !showLoginPage;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    if (showLoginPage) {
+      return LoginPage(togglePages: togglePages);
+    } else {
+      return RegisterPage(togglePages: togglePages);
+    }
   }
 }
