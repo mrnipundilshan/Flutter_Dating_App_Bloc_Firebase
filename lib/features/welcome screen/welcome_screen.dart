@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -11,17 +12,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   int currentPage = 0;
   List<Map<String, String>> splashData = [
     {
-      "text": "Welcome to Tokoto, Let’s shop!",
-      "image": "https://i.postimg.cc/mhhVywp9/splash-1.png",
+      "text": "Welcome to Lofify, Where Love Meets AI!",
+      "image": "assets/welcomescreen1.png",
     },
     {
-      "text":
-          "We help people conect with store \naround United State of America",
-      "image": "https://i.postimg.cc/PNcy3w0R/splash-2.png",
+      "text": "Meet Your Match from a Word of Possibilities",
+      "image": "assets/welcomescreen2.png",
     },
     {
-      "text": "We show the easy way to shop. \nJust stay at home with us",
-      "image": "https://i.postimg.cc/wRtVxqR2/splash-3.png",
+      "text": "Unlock Premium, Explore More Benifits",
+      "image": "assets/welcomescreen3.png",
     },
   ];
   @override
@@ -48,7 +48,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
               Expanded(
-                flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -65,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             width: currentPage == index ? 20 : 6,
                             decoration: BoxDecoration(
                               color: currentPage == index
-                                  ? const Color(0xFFFF7643)
+                                  ? Theme.of(context).colorScheme.secondary
                                   : const Color(0xFFD8D8D8),
                               borderRadius: BorderRadius.circular(3),
                             ),
@@ -79,7 +78,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          backgroundColor: const Color(0xFFFF7643),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondary,
                           foregroundColor: Colors.white,
                           minimumSize: const Size(double.infinity, 48),
                           shape: const RoundedRectangleBorder(
@@ -102,7 +103,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 }
 
 class SplashContent extends StatefulWidget {
-  const SplashContent({Key? key, this.text, this.image}) : super(key: key);
+  const SplashContent({super.key, this.text, this.image});
   final String? text, image;
 
   @override
@@ -112,24 +113,27 @@ class SplashContent extends StatefulWidget {
 class _SplashContentState extends State<SplashContent> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
         const Spacer(),
-        const Text(
-          "TOKOTO",
-          style: TextStyle(
-            fontSize: 32,
-            color: Color(0xFFFF7643),
-            fontWeight: FontWeight.bold,
+        Text(
+          "Lovify",
+          style: GoogleFonts.patrickHand(
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontWeight: FontWeight.bold,
+              fontSize: width * 0.12,
+            ),
           ),
         ),
         Text(widget.text!, textAlign: TextAlign.center),
         const Spacer(flex: 2),
-        Image.network(
+        Image.asset(
           widget.image!,
           fit: BoxFit.contain,
-          height: 265,
-          width: 235,
+          height: width,
+          width: width,
         ),
       ],
     );
