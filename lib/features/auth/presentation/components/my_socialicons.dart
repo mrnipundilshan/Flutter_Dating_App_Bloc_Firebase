@@ -17,7 +17,7 @@ class MySocialicons extends StatelessWidget {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.transparent, // optional background
+          color: Colors.white60, // optional background
           borderRadius: BorderRadius.circular(40), // rounded corners
           border: Border.all(
             color: Theme.of(context).colorScheme.tertiary, // border color
