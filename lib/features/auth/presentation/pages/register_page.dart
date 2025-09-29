@@ -1,6 +1,8 @@
+import 'package:datingapp/features/auth/presentation/components/my_socialicons.dart';
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -27,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(),
       body: SafeArea(
+        bottom: false,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.04),
           child: Column(
@@ -138,6 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               SizedBox(height: height * 0.02),
 
+              // terms and conditions
               Row(
                 children: [
                   Checkbox(
@@ -161,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       textStyle: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w100,
-                        fontSize: width * 0.04,
+                        fontSize: width * 0.05,
                       ),
                     ),
                   ),
@@ -172,13 +176,85 @@ class _RegisterPageState extends State<RegisterPage> {
                         textStyle: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.w100,
-                          fontSize: width * 0.04,
+                          fontSize: width * 0.05,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
+              // alread y have account
+              Row(
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w100,
+                        fontSize: width * 0.05,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      " Sign in",
+                      style: GoogleFonts.patrickHand(
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.w100,
+                          fontSize: width * 0.05,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // left divider
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        thickness: 1,
+                        endIndent: 8, // space between line and text
+                      ),
+                    ),
+                  ),
+
+                  // text in the middle
+                  Text(
+                    "or continue with",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontSize: width * 0.05,
+                      ),
+                    ),
+                  ),
+
+                  // right divider
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        thickness: 1,
+                        indent: 8, // space between text and line
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: height * 0.02),
+
+              // social buttons
+              MySocialicons(asssetUrl: "assets/google.svg"),
             ],
           ),
         ),

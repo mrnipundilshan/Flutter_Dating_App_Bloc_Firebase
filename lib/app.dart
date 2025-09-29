@@ -4,6 +4,7 @@ import 'package:datingapp/features/home/home_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
 import 'package:datingapp/themes/bloc/theme_bloc.dart';
 import 'package:datingapp/themes/bloc/theme_state.dart';
+import 'package:datingapp/themes/dark_mode.dart';
 import 'package:datingapp/themes/light_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // <-- important
