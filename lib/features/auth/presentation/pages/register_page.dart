@@ -254,7 +254,26 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(height: height * 0.02),
 
               // social buttons
-              MySocialicons(asssetUrl: "assets/google.svg"),
+              Row(
+                children: [
+                  MySocialicons(
+                    asssetUrl: "assets/google.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    asssetUrl: "assets/apple.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    asssetUrl: "assets/facebook.svg",
+                    voidCallback: () {},
+                  ),
+                  MySocialicons(
+                    asssetUrl: "assets/twitter.svg",
+                    voidCallback: () {},
+                  ),
+                ],
+              ),
             ],
           ),
         ),

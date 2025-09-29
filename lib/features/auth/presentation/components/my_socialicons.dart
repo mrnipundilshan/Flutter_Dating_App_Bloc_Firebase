@@ -3,7 +3,12 @@ import 'package:flutter_svg/svg.dart';
 
 class MySocialicons extends StatelessWidget {
   final String asssetUrl;
-  const MySocialicons({super.key, required this.asssetUrl});
+  final VoidCallback voidCallback;
+  const MySocialicons({
+    super.key,
+    required this.asssetUrl,
+    required this.voidCallback,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +16,7 @@ class MySocialicons extends StatelessWidget {
 
     return GestureDetector(
       child: SvgPicture.asset(
-        "assets/google.svg",
+        asssetUrl,
         width: width * 0.1, // optional
         height: width * 0.1, // optional
       ),
