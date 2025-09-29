@@ -16,6 +16,9 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordTextController = TextEditingController();
   TextEditingController confirmPasswordTextController = TextEditingController();
 
+  // Initialize as nullable bool for null safety
+  bool? checkBoxValue = false;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -134,6 +137,48 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               SizedBox(height: height * 0.02),
+
+              Row(
+                children: [
+                  Checkbox(
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    side: BorderSide(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.secondary, // border always visible
+                      width: 2,
+                    ),
+                    value: checkBoxValue,
+                    onChanged: (bool? newValue) {
+                      setState(() {
+                        checkBoxValue = newValue;
+                      });
+                    },
+                  ),
+                  Text(
+                    "I agree to Lovify",
+                    style: GoogleFonts.patrickHand(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w100,
+                        fontSize: width * 0.04,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      " Terms & Conditions.",
+                      style: GoogleFonts.patrickHand(
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.w100,
+                          fontSize: width * 0.04,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
