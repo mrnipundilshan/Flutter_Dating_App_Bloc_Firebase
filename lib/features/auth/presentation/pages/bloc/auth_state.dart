@@ -6,7 +6,7 @@ part of 'auth_bloc.dart';
 sealed class AuthState {}
 
 // initial
-final class AurhInitial extends AuthState {}
+final class AuthInitial extends AuthState {}
 
 // loading
 class AuthLoading extends AuthState {}

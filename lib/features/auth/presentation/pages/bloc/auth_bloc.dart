@@ -13,7 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepository authRepository;
   AppUser? _currentUser;
 
-  AuthBloc({required this.authRepository}) : super(AurhInitial()) {
+  AuthBloc({required this.authRepository}) : super(AuthInitial()) {
     on<RegisterButtonClickedEvent>(registerButtonClickedEvent);
     on<LoginButtonClickedEvent>(loginButtonClickedEvent);
     on<LogOutButtonClickedEvent>(logOutButtonClickedEvent);
@@ -32,6 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // check if user already authenticated
   Future<void> authCheck(AuthCheck event, emit) async {
+    emit(AuthLoading());
     final AppUser? user = await authRepository.getCurrentUser();
 
     if (user != null) {
