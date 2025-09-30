@@ -20,6 +20,21 @@ class Authenticated extends AuthState {
 // Unauthenticated
 class Unauthenticated extends AuthState {}
 
+// navigate to signup
+class NavigateToSignUp extends AuthState {}
+
+// navigate to signin
+class NavigateToSignIn extends AuthState {}
+
+// navigate to signup
+class NavigateToSignUpText extends AuthState {}
+
+// navigate to signin
+class NavigateToSignInText extends AuthState {}
+
+//navigate to back button
+class BackButtonClickedState extends AuthState {}
+
 // Error..
 class AuthError extends AuthState {
   final String message;

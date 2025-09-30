@@ -1,16 +1,14 @@
 import 'package:datingapp/features/auth/data/firebase_auth_repo.dart';
-import 'package:datingapp/features/auth/presentation/pages/auth_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/auth_welcome.dart';
+import 'package:datingapp/features/auth/presentation/pages/login_page.dart';
+import 'package:datingapp/features/auth/presentation/pages/register_page.dart';
 import 'package:datingapp/features/home/home_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
-import 'package:datingapp/features/splash%20screen/splash_screen.dart';
-import 'package:datingapp/features/welcome%20screen/welcome_screen.dart';
 import 'package:datingapp/themes/bloc/theme_bloc.dart';
 import 'package:datingapp/themes/bloc/theme_state.dart';
-import 'package:datingapp/themes/dark_mode.dart';
 import 'package:datingapp/themes/light_mode.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // <-- important
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /*
   App - Root Level
@@ -46,7 +44,7 @@ class MainApp extends StatelessWidget {
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: darkMode,
+          theme: lightMode,
 
           home: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
@@ -54,6 +52,33 @@ class MainApp extends StatelessWidget {
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text(state.message)));
+              }
+              if (state is NavigateToSignUp) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const RegisterPage()),
+                );
+              }
+              if (state is NavigateToSignIn) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                );
+              }
+              if (state is NavigateToSignUpText) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const RegisterPage()),
+                );
+              }
+              if (state is NavigateToSignInText) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                );
+              }
+              if (state is BackButtonClickedState) {
+                Navigator.popUntil(context, (route) => route.isFirst);
               }
             },
             builder: (context, state) {

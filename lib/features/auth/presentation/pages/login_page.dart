@@ -1,12 +1,14 @@
 import 'package:datingapp/features/auth/presentation/components/my_socialicons.dart';
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
+import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? togglePages;
-  const LoginPage({super.key, required this.togglePages});
+  const LoginPage({super.key, this.togglePages});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -25,7 +27,17 @@ class _LoginPageState extends State<LoginPage> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          onPressed: () {
+            context.read<AuthBloc>().add(BackButtonClickedEvent());
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.04),
@@ -176,7 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: widget.togglePages,
+                    onTap: () {
+                      context.read<AuthBloc>().add(SignUpTextClickedEvent());
+                    },
                     child: Text(
                       " Sign up",
                       style: GoogleFonts.patrickHand(

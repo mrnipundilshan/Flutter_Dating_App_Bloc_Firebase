@@ -18,6 +18,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginButtonClickedEvent>(loginButtonClickedEvent);
     on<LogOutButtonClickedEvent>(logOutButtonClickedEvent);
     on<AuthCheck>(authCheck);
+
+    on<SignUpButtonClickedEvent>(signUpButtonClickedEvent);
+
+    on<SignInButtonClickedEvent>(signInButtonClickedEvent);
+
+    on<SignUpTextClickedEvent>(signUpTextClickedEvent);
+
+    on<SignInTextClickedEvent>(signInTextClickedEvent);
+
+    on<BackButtonClickedEvent>(backButtonClickedEvent);
   }
 
   // check if user already authenticated
@@ -93,5 +103,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     authRepository.logout();
     emit(Unauthenticated());
+  }
+
+  void signUpButtonClickedEvent(SignUpButtonClickedEvent event, emit) {
+    emit(NavigateToSignUp());
+  }
+
+  void signInButtonClickedEvent(SignInButtonClickedEvent event, emit) {
+    emit(NavigateToSignIn());
+  }
+
+  void signUpTextClickedEvent(SignUpTextClickedEvent event, emit) {
+    emit(NavigateToSignUpText());
+  }
+
+  void signInTextClickedEvent(SignInTextClickedEvent event, emit) {
+    emit(NavigateToSignInText());
+  }
+
+  void backButtonClickedEvent(BackButtonClickedEvent event, emit) {
+    emit(BackButtonClickedState());
   }
 }
