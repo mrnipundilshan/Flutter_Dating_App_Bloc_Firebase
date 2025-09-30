@@ -40,3 +40,6 @@ class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
 }
+
+// Splash loading state
+class SplashLoading extends AuthState {}

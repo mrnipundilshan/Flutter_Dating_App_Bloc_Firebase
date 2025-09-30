@@ -32,8 +32,7 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) =>
-              AuthBloc(authRepository: firebaseAuthrepo)..add(AuthCheck()),
+          create: (context) => AuthBloc(authRepository: firebaseAuthrepo),
         ),
 
         BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),

@@ -1,4 +1,3 @@
-import 'package:datingapp/features/auth/presentation/pages/auth_welcome.dart';
 import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
 import 'package:datingapp/features/home/home_page.dart';
 import 'package:datingapp/features/welcome%20screen/welcome_screen.dart';
@@ -18,17 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _startSplash();
-  }
-
-  void _startSplash() async {
-    // Wait 2 seconds
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Trigger auth check in bloc
-    if (mounted) {
-      context.read<AuthBloc>().add(AuthCheck());
-    }
+    // Trigger splash initialization after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AuthBloc>().add(SplashInitialized());
+      }
+    });
   }
 
   @override
@@ -36,11 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
     double width = MediaQuery.of(context).size.width;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
         if (state is AuthError) {
           ScaffoldMessenger.of(
             context,
@@ -61,12 +50,16 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       },
       builder: (context, state) {
+        // Show splash screen by default, hide only when navigation states are reached
+        if (state is Authenticated || state is Unauthenticated) {
+          return const SizedBox.shrink();
+        }
+
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.secondary,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-
               children: [
                 SizedBox(height: width * 0.00),
                 Column(
@@ -90,19 +83,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   ],
                 ),
                 SizedBox(
-                  width: 60.0, // Increase width to make the indicator larger
-                  height: 60.0, // Increase height to make the indicator larger
+                  width: 60.0,
+                  height: 60.0,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.white,
-                    ), // Sets the progress indicator color to white
-                    strokeWidth:
-                        5.0, // Thinner stroke for a modern, minimalist look
-                    backgroundColor: Colors.white.withAlpha(
-                      51,
-                    ), // Subtle background for contrast
-                    strokeCap: StrokeCap
-                        .round, // Rounded edges for a polished appearance
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    strokeWidth: 5.0,
+                    backgroundColor: Colors.white.withAlpha(51),
+                    strokeCap: StrokeCap.round,
                   ),
                 ),
               ],

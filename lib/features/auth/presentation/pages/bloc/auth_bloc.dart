@@ -18,6 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginButtonClickedEvent>(loginButtonClickedEvent);
     on<LogOutButtonClickedEvent>(logOutButtonClickedEvent);
     on<AuthCheck>(authCheck);
+    on<SplashInitialized>(splashInitialized);
 
     on<SignUpButtonClickedEvent>(signUpButtonClickedEvent);
 
@@ -33,6 +34,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   // check if user already authenticated
   Future<void> authCheck(AuthCheck event, emit) async {
     emit(AuthLoading());
+    final AppUser? user = await authRepository.getCurrentUser();
+
+    if (user != null) {
+      _currentUser = user;
+      emit(Authenticated(user));
+    } else {
+      emit(Unauthenticated());
+    }
+  }
+
+  // handle splash screen initialization with timing
+  Future<void> splashInitialized(SplashInitialized event, emit) async {
+    emit(SplashLoading());
+
+    // Wait minimum 2 seconds
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Then check authentication
     final AppUser? user = await authRepository.getCurrentUser();
 
     if (user != null) {
