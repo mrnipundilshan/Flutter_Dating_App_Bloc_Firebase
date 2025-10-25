@@ -34,8 +34,6 @@ class SignUpTextClickedEvent extends AuthEvent {}
 
 class SignInTextClickedEvent extends AuthEvent {}
 
-class BackButtonClickedEvent extends AuthEvent {}
-
 class AuthCheck extends AuthEvent {}
 
 class SplashInitialized extends AuthEvent {}

@@ -1,3 +1,4 @@
+import 'package:datingapp/features/auth/presentation/pages/auth_welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -74,7 +75,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       const Spacer(flex: 3),
                       ElevatedButton(
                         onPressed: () {
-                          // Navigate to Sign In Screen or any other screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => AuthWelcome()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

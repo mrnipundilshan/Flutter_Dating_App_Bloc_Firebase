@@ -32,9 +32,6 @@ class NavigateToSignUpText extends AuthState {}
 // navigate to signin
 class NavigateToSignInText extends AuthState {}
 
-//navigate to back button
-class BackButtonClickedState extends AuthState {}
-
 // Error..
 class AuthError extends AuthState {
   final String message;

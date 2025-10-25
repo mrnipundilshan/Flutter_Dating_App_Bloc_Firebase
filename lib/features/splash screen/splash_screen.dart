@@ -1,4 +1,4 @@
-import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
+import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:datingapp/features/home/home_page.dart';
 import 'package:datingapp/features/welcome%20screen/welcome_screen.dart';
 import 'package:flutter/material.dart';

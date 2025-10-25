@@ -1,6 +1,6 @@
 import 'package:datingapp/features/auth/presentation/components/my_socialicons.dart';
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
-import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
+import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
-            context.read<AuthBloc>().add(BackButtonClickedEvent());
+            Navigator.pop(context);
           },
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:datingapp/features/auth/presentation/components/my_socialicons_long.dart';
-import 'package:datingapp/features/auth/presentation/pages/bloc/auth_bloc.dart';
+import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:datingapp/features/auth/presentation/pages/login_page.dart';
 import 'package:datingapp/features/auth/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +50,6 @@ class _AuthWelcomeState extends State<AuthWelcome> {
             context,
             MaterialPageRoute(builder: (_) => const LoginPage()),
           );
-        }
-        if (state is BackButtonClickedState) {
-          Navigator.popUntil(context, (route) => route.isFirst);
         }
       },
       builder: (context, state) {

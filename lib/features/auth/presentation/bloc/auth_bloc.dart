@@ -27,8 +27,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpTextClickedEvent>(signUpTextClickedEvent);
 
     on<SignInTextClickedEvent>(signInTextClickedEvent);
-
-    on<BackButtonClickedEvent>(backButtonClickedEvent);
   }
 
   // check if user already authenticated
@@ -139,9 +137,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void signInTextClickedEvent(SignInTextClickedEvent event, emit) {
     emit(NavigateToSignInText());
-  }
-
-  void backButtonClickedEvent(BackButtonClickedEvent event, emit) {
-    emit(BackButtonClickedState());
   }
 }
