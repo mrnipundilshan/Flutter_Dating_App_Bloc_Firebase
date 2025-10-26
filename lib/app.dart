@@ -3,7 +3,7 @@ import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:datingapp/features/splash%20screen/splash_screen.dart';
 import 'package:datingapp/themes/bloc/theme_bloc.dart';
 import 'package:datingapp/themes/bloc/theme_state.dart';
-import 'package:datingapp/themes/light_mode.dart';
+import 'package:datingapp/themes/dark_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,7 +40,7 @@ class MainApp extends StatelessWidget {
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: lightMode,
+          theme: darkMode,
 
           home: const SplashScreen(),
         ),

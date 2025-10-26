@@ -1,5 +1,5 @@
 import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:datingapp/features/home/home_page.dart';
+import 'package:datingapp/features/navigation/my_navigation_bar.dart';
 import 'package:datingapp/features/welcome%20screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (state is Authenticated) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
+            MaterialPageRoute(builder: (_) => const MyNavigationBar()),
           );
         }
         if (state is Unauthenticated) {

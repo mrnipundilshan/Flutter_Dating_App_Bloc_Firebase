@@ -2,7 +2,7 @@ import 'package:datingapp/core/components/my_snackbar.dart';
 import 'package:datingapp/features/auth/presentation/components/my_socialicons.dart';
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
 import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:datingapp/features/home/home_page.dart';
+import 'package:datingapp/features/navigation/my_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
         if (state is Authenticated) {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
+            MaterialPageRoute(builder: (_) => const MyNavigationBar()),
 
             (Route<dynamic> route) => false, // removes all previous routes
           );

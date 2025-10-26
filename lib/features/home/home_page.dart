@@ -11,44 +11,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0; // keeps track of the selected tab
-  final PageController _pageController = PageController();
-
-  // pages for each tab
-  final List<Widget> _pages = [
-    const Center(child: Text("Home Page")),
-    const Center(child: Text("Search Page")),
-    const Center(child: Text("Profile Page")),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() => _selectedIndex = index);
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFF3EA4), // <-- Use 0xFF + your hex code
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) => setState(() => _selectedIndex = index),
-        children: _pages,
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, // highlight selected item
-        onTap: _onItemTapped, // handle tap
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+      body: Center(
+        child: ElevatedButton(
+          child: const Text("log out"),
+          onPressed: () {
+            context.read<AuthBloc>().add(LogOutButtonClickedEvent());
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => WelcomeScreen()),
+            );
+          },
+        ),
       ),
     );
   }
