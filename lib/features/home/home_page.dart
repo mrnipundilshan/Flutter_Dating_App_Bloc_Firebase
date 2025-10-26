@@ -1,4 +1,5 @@
 import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:datingapp/features/welcome%20screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +20,10 @@ class _HomePageState extends State<HomePage> {
           child: const Text("log out"),
           onPressed: () {
             context.read<AuthBloc>().add(LogOutButtonClickedEvent());
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => WelcomeScreen()),
+            );
           },
         ),
       ),
