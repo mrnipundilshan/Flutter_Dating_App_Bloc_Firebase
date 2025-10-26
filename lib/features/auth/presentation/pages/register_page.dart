@@ -1,3 +1,4 @@
+import 'package:datingapp/core/components/my_snackbar.dart';
 import 'package:datingapp/features/auth/presentation/components/my_socialicons.dart';
 import 'package:datingapp/features/auth/presentation/components/my_textfield.dart';
 import 'package:datingapp/features/auth/presentation/bloc/auth_bloc.dart';
@@ -21,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController confirmPasswordTextController = TextEditingController();
 
   // Initialize as nullable bool for null safety
-  bool? checkBoxValue = false;
+  bool checkBoxValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       value: checkBoxValue,
                       onChanged: (bool? newValue) {
                         setState(() {
-                          checkBoxValue = newValue;
+                          checkBoxValue = newValue!;
                         });
                       },
                     ),
@@ -254,7 +255,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (checkBoxValue == false) {
+                    mySnackbar(context, "Agree for terms and conditions");
+                    return;
+                  }
+
+                  if (nameTextController.text.isEmpty ||
+                      emailTextController.text.isEmpty ||
+                      passwordTextController.text.isEmpty ||
+                      confirmPasswordTextController.text.isEmpty) {
+                    mySnackbar(context, "Fill all fields");
+                    return;
+                  }
+
+                  context.read<AuthBloc>().add(
+                    SignUpButtonClickedEvent(
+                      name: nameTextController.text.trim(),
+                      email: emailTextController.text.trim(),
+                      password: passwordTextController.text.trim(),
+                      confirmPassword: confirmPasswordTextController.text
+                          .trim(),
+                    ),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(

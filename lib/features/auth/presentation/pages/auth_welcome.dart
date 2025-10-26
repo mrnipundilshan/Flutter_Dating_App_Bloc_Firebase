@@ -127,8 +127,9 @@ class _AuthWelcomeState extends State<AuthWelcome> {
                         ),
                       ),
                       onPressed: () {
-                        context.read<AuthBloc>().add(
-                          SignUpButtonClickedEvent(),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => RegisterPage()),
                         );
                       },
                       child: SizedBox(

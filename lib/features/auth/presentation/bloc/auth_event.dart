@@ -26,7 +26,19 @@ class LoginButtonClickedEvent extends AuthEvent {
 
 class LogOutButtonClickedEvent extends AuthEvent {}
 
-class SignUpButtonClickedEvent extends AuthEvent {}
+class SignUpButtonClickedEvent extends AuthEvent {
+  final String name;
+  final String email;
+  final String password;
+  final String confirmPassword;
+
+  SignUpButtonClickedEvent({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+  });
+}
 
 class SignInButtonClickedEvent extends AuthEvent {}
 
