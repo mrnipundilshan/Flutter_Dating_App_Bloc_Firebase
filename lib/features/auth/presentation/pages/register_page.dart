@@ -269,6 +269,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     return;
                   }
 
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(emailTextController.text.trim())) {
+                    mySnackbar(context, "Please enter a valid email address");
+                    return;
+                  }
+
+                  if (passwordTextController.text.trim().length < 6) {
+                    mySnackbar(context, "password should 6 character length");
+                    return;
+                  }
+
                   context.read<AuthBloc>().add(
                     SignUpButtonClickedEvent(
                       name: nameTextController.text.trim(),
