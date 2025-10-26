@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:datingapp/features/auth/domain/entities/app_user.dart';
 import 'package:datingapp/features/auth/domain/repository/auth_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:meta/meta.dart';
 
@@ -14,13 +15,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AppUser? _currentUser;
 
   AuthBloc({required this.authRepository}) : super(AuthInitial()) {
-    on<RegisterButtonClickedEvent>(registerButtonClickedEvent);
+    on<SignUpButtonClickedEvent>(signUpButtonClickedEvent);
     on<LoginButtonClickedEvent>(loginButtonClickedEvent);
     on<LogOutButtonClickedEvent>(logOutButtonClickedEvent);
     on<AuthCheck>(authCheck);
     on<SplashInitialized>(splashInitialized);
-
-    on<SignUpButtonClickedEvent>(signUpButtonClickedEvent);
 
     on<SignInButtonClickedEvent>(signInButtonClickedEvent);
 
@@ -63,10 +62,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   // get current user
   AppUser? get currentUser => _currentUser;
 
-  // register with email + paswword + name
-  Future<void> registerButtonClickedEvent(
-    RegisterButtonClickedEvent event,
-    emit,
+  // sign up with email + paswword + name
+  FutureOr<void> signUpButtonClickedEvent(
+    SignUpButtonClickedEvent event,
+    Emitter<AuthState> emit,
   ) async {
     try {
       emit(AuthLoading());
@@ -83,8 +82,41 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         emit(Unauthenticated());
       }
+    } on FirebaseAuthException catch (e) {
+      String message;
+
+      switch (e.code) {
+        case 'email-already-in-use':
+          message = 'Email already in use';
+          break;
+        case 'invalid-email':
+          message = 'Invalid email address';
+          break;
+        case 'weak-password':
+          message = 'Password too weak';
+          break;
+        case 'user-not-found':
+          message = 'No account found';
+          break;
+        case 'wrong-password':
+          message = 'Incorrect password';
+          break;
+        case 'user-disabled':
+          message = 'Account disabled';
+          break;
+        case 'too-many-requests':
+          message = 'Too many attempts. Try later';
+          break;
+        case 'operation-not-allowed':
+          message = 'Sign up not allowed';
+          break;
+        default:
+          message = 'Sign up failed. Try again';
+      }
+
+      emit(AuthError(message));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('Sign up failed. Try again'));
       emit(Unauthenticated());
     }
   }
@@ -106,10 +138,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _currentUser = user;
         emit(Authenticated(user));
       } else {
-        Unauthenticated();
+        emit(Unauthenticated());
       }
+    } on FirebaseAuthException catch (e) {
+      String message;
+
+      switch (e.code) {
+        case 'user-not-found':
+          message = 'No account found';
+          break;
+        case 'wrong-password':
+          message = 'Incorrect password';
+          break;
+        case 'invalid-email':
+          message = 'Invalid email address';
+          break;
+        case 'user-disabled':
+          message = 'Account disabled';
+          break;
+        case 'too-many-requests':
+          message = 'Too many attempts. Try later';
+          break;
+        case 'invalid-credential':
+          message = 'Invalid credentials';
+          break;
+        default:
+          message = 'Login failed. Try again';
+      }
+
+      emit(AuthError(message));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('Login failed. Try again'));
       emit(Unauthenticated());
     }
   }
@@ -121,10 +180,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     authRepository.logout();
     emit(Unauthenticated());
-  }
-
-  void signUpButtonClickedEvent(SignUpButtonClickedEvent event, emit) {
-    emit(NavigateToSignUp());
   }
 
   void signInButtonClickedEvent(SignInButtonClickedEvent event, emit) {

@@ -36,6 +36,9 @@ class FirebaseAuthRepo implements AuthRepository {
 
       // return user
       return user;
+    } on FirebaseAuthException {
+      // Re-throw Firebase exceptions so they can be caught in the bloc
+      rethrow;
     } catch (e) {
       throw Exception("Sign Up failed :$e");
     }
@@ -65,11 +68,13 @@ class FirebaseAuthRepo implements AuthRepository {
       );
 
       return user;
+    } on FirebaseAuthException {
+      // Re-throw Firebase exceptions so they can be caught in the bloc
+      rethrow;
     } catch (e) {
-      // catch any errors
-      Exception("Login failed: $e");
+      // catch any other errors
+      throw Exception("Login failed: $e");
     }
-    return null;
   }
 
   @override
