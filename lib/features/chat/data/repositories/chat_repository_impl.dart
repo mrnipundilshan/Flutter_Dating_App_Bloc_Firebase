@@ -1,27 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/features/chat/data/models/message_model.dart';
+import 'package:datingapp/features/chat/data/services/chat_service.dart';
 import 'package:datingapp/features/chat/domain/entities/message.dart';
 import 'package:datingapp/features/chat/domain/repositories/chat_repositories.dart';
 
 class ChatRepositoryImpl implements ChatRepositories {
-  final FirebaseFirestore firestore;
+  final ChatService chatService;
 
-  ChatRepositoryImpl(this.firestore);
-
-  String _chatId(String uid1, String uid2) {
-    return uid1.hashCode <= uid2.hashCode ? '$uid1-$uid2' : '$uid2-$uid1';
-  }
+  ChatRepositoryImpl(this.chatService);
 
   @override
   Stream<List<Message>> getMessages(String userId, String peerId) {
-    final chatId = _chatId(userId, peerId);
+    final chatId = chatService.getChatId(userId, peerId);
 
-    return firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('timestamp', descending: true)
-        .snapshots()
+    return chatService
+        .getMessageStream(chatId)
         .map(
           (snapshot) => snapshot.docs
               .map((doc) => MessageModel.fromFireStore(doc.data(), doc.id))
@@ -30,22 +22,12 @@ class ChatRepositoryImpl implements ChatRepositories {
   }
 
   @override
-  Future<void> markMessageAsSeen(String messageId, String chatId) async {
-    await firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .doc(messageId)
-        .update({'isSeen': true});
-  }
-
-  @override
   Future<void> sendMessage(
     String senderId,
     String receiverId,
     String text,
   ) async {
-    final chatId = _chatId(senderId, receiverId);
+    final chatId = chatService.getChatId(senderId, receiverId);
 
     final message = MessageModel(
       id: '',
@@ -56,10 +38,11 @@ class ChatRepositoryImpl implements ChatRepositories {
       isSeen: false,
     );
 
-    await firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .add(message.toMap());
+    await chatService.sendMessage(chatId, message.toMap());
+  }
+
+  @override
+  Future<void> markMessageAsSeen(String messageId, String chatId) async {
+    await chatService.markMessageAsSeen(chatId, messageId);
   }
 }
