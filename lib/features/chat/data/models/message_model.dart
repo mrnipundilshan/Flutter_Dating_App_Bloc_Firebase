@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/features/chat/domain/entities/message.dart';
 
 class MessageModel extends Message {
@@ -16,7 +17,7 @@ class MessageModel extends Message {
       senderId: doc['senderId'],
       receiverId: doc['receiverId'],
       text: doc['text'],
-      timestamp: doc['timestamp'],
+      timestamp: (doc['timestamp'] as Timestamp).toDate(),
       isSeen: doc['isSeen'],
     );
   }

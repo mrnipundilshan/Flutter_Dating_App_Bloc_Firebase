@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/features/auth/domain/entities/app_user.dart';
+import 'package:datingapp/features/chat/presentation/pages/chat_list_page.dart';
 import 'package:datingapp/features/home/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyNavigationBar extends StatefulWidget {
@@ -12,14 +16,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   int _selectedIndex = 0; // keeps track of the selected tab
   final PageController _pageController = PageController();
 
-  // pages for each tab
-  final List<Widget> _pages = [
-    HomePage(),
-    const Center(child: Text("For you")),
-    const Center(child: Text("Chat Page")),
-    const Center(child: Text("Search Page")),
-    const Center(child: Text("Profile Page")),
-  ];
+  List<AppUser> allUsers = [];
+  String currentUserId = "";
 
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
@@ -31,13 +29,40 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    loadUsers();
+  }
+
+  Future<void> loadUsers() async {
+    final auth = FirebaseAuth.instance;
+    currentUserId = auth.currentUser!.uid;
+
+    final snapshot = await FirebaseFirestore.instance.collection("users").get();
+
+    allUsers = snapshot.docs.map((doc) {
+      return AppUser(uid: doc.id, email: doc['email'], name: doc['name']);
+    }).toList();
+
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // pages for each tab
+    final List<Widget> pages = [
+      HomePage(),
+      const Center(child: Text("For you")),
+      ChatListPage(users: allUsers, currentUserId: currentUserId),
+      const Center(child: Text("Search Page")),
+      const Center(child: Text("Profile Page")),
+    ];
     return Scaffold(
       backgroundColor: const Color(0xFFFF3EA4), // <-- Use 0xFF + your hex code
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) => setState(() => _selectedIndex = index),
-        children: _pages,
+        children: pages,
       ),
 
       bottomNavigationBar: BottomNavigationBar(

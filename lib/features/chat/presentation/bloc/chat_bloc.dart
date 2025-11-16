@@ -18,6 +18,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(_onSendMessage);
 
     on<MarkMessageSeenEvent>(_onMarkedMessageSeen);
+
+    on<_MessagesUpdatedEvent>(_onMessageUpdateEvent);
   }
 
   FutureOr<void> _onLoadMessages(
@@ -60,6 +62,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     } catch (e) {
       emit(ChatError("Failed to mark message as seen."));
     }
+  }
+
+  FutureOr<void> _onMessageUpdateEvent(
+    _MessagesUpdatedEvent event,
+    Emitter<ChatState> emit,
+  ) {
+    emit(ChatLoaded(event.messages));
   }
 }
 
