@@ -15,7 +15,12 @@ class ChatListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Messages")),
+      appBar: AppBar(
+        title: const Text(
+          "Messages",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
@@ -24,10 +29,15 @@ class ChatListPage extends StatelessWidget {
           if (user.uid == currentUserId) return const SizedBox();
 
           return ListTile(
+            contentPadding: EdgeInsets.only(bottom: 10, left: 20),
             leading: CircleAvatar(
+              radius: 25,
               backgroundImage: const AssetImage("assets/profile.png"),
             ),
-            title: Text(user.name),
+            title: Text(
+              user.name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
             onTap: () {
               Navigator.push(
                 context,
