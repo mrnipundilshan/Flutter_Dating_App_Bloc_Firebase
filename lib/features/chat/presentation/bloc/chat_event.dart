@@ -41,3 +41,16 @@ class MarkMessageSeenEvent extends ChatEvent {
   @override
   List<Object> get props => [chatId, messageId];
 }
+
+class MarkAllMessagesAsReadEvent extends ChatEvent {
+  final String userId;
+  final String peerId;
+
+  const MarkAllMessagesAsReadEvent({
+    required this.userId,
+    required this.peerId,
+  });
+
+  @override
+  List<Object> get props => [userId, peerId];
+}

@@ -27,7 +27,7 @@ class MessageModel extends Message {
       'senderId': senderId,
       'receiverId': receiverId,
       'text': text,
-      'timestamp': timestamp,
+      'timestamp': Timestamp.fromDate(timestamp),
       'isSeen': isSeen,
     };
   }

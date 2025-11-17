@@ -91,62 +91,106 @@ class ChatListPage extends StatelessWidget {
             currentUserId,
             user.uid,
           );
+          final unreadCountStream = chatBloc.getUnreadCount(
+            currentUserId,
+            user.uid,
+          );
 
           return StreamBuilder(
             stream: lastMessageStream,
-            builder: (context, snapshot) {
-              final message = snapshot.data;
+            builder: (context, messageSnapshot) {
+              final message = messageSnapshot.data;
               final previewText = _getPreviewText(message, currentUserId);
               final displayText = _truncateText(previewText, 40);
               final timestampText = message != null
                   ? _formatTimestamp(message.timestamp)
                   : "";
 
-              return ListTile(
-                contentPadding: const EdgeInsets.only(
-                  bottom: 10,
-                  left: 20,
-                  right: 20,
-                ),
-                leading: const CircleAvatar(
-                  radius: 25,
-                  backgroundImage: AssetImage("assets/profile.png"),
-                ),
-                title: Text(
-                  user.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        displayText,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              return StreamBuilder<int>(
+                stream: unreadCountStream,
+                builder: (context, unreadSnapshot) {
+                  final unreadCount = unreadSnapshot.data ?? 0;
+
+                  return ListTile(
+                    contentPadding: const EdgeInsets.only(
+                      bottom: 10,
+                      left: 20,
+                      right: 20,
+                    ),
+                    leading: const CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage("assets/profile.png"),
+                    ),
+                    title: Text(
+                      user.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: unreadCount > 0
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
-                    if (timestampText.isNotEmpty) ...[
-                      const SizedBox(width: 8),
-                      Text(
-                        timestampText,
-                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                      ),
-                    ],
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ChatRoomPage(
-                        currentUserId: currentUserId,
-                        peerUser: user,
-                      ),
+                    subtitle: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            displayText,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                              fontWeight: unreadCount > 0
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (timestampText.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            timestampText,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: unreadCount > 0
+                                  ? Colors.pink
+                                  : Colors.grey[500],
+                              fontWeight: unreadCount > 0
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
+                    trailing: unreadCount > 0
+                        ? Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Colors.pink,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              unreadCount > 99 ? '99+' : unreadCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        : null,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChatRoomPage(
+                            currentUserId: currentUserId,
+                            peerUser: user,
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               );

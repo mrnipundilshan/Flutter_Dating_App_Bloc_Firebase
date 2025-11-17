@@ -45,4 +45,48 @@ class ChatService {
         .doc(messageId)
         .update({'isSeen': true});
   }
+
+  /// Mark all unread messages as read for a specific user in a chat
+  Future<void> markAllMessagesAsRead(String chatId, String userId) async {
+    final messagesSnapshot = await firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .where('receiverId', isEqualTo: userId)
+        .where('isSeen', isEqualTo: false)
+        .get();
+
+    final batch = firestore.batch();
+    for (var doc in messagesSnapshot.docs) {
+      batch.update(doc.reference, {'isSeen': true});
+    }
+    await batch.commit();
+
+    // Reset unread count for this user
+    await firestore.collection('chats').doc(chatId).set({
+      'unreadCount_$userId': 0,
+    }, SetOptions(merge: true));
+  }
+
+  /// Increment unread count for a user in a chat
+  Future<void> incrementUnreadCount(String chatId, String userId) async {
+    final chatDoc = firestore.collection('chats').doc(chatId);
+    final chatData = await chatDoc.get();
+    final currentCount = chatData.data()?['unreadCount_$userId'] ?? 0;
+
+    await chatDoc.set({
+      'unreadCount_$userId': currentCount + 1,
+    }, SetOptions(merge: true));
+  }
+
+  /// Get unread count stream for a user in a chat
+  Stream<int> getUnreadCountStream(String chatId, String userId) {
+    return firestore.collection('chats').doc(chatId).snapshots().map((
+      snapshot,
+    ) {
+      final data = snapshot.data();
+      if (data == null) return 0;
+      return (data['unreadCount_$userId'] as num?)?.toInt() ?? 0;
+    });
+  }
 }

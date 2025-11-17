@@ -8,4 +8,10 @@ abstract class ChatRepositories {
   Future<void> sendMessage(String senderId, String receiverId, String text);
 
   Future<void> markMessageAsSeen(String messageId, String chatId);
+
+  Future<void> markAllMessagesAsRead(String userId, String peerId);
+
+  Future<void> incrementUnreadCount(String senderId, String receiverId);
+
+  Stream<int> getUnreadCount(String userId, String peerId);
 }

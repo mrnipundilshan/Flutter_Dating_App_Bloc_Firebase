@@ -30,6 +30,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         peerId: widget.peerUser.uid,
       ),
     );
+    // Mark all messages as read when entering the chat room
+    context.read<ChatBloc>().add(
+      MarkAllMessagesAsReadEvent(
+        userId: widget.currentUserId,
+        peerId: widget.peerUser.uid,
+      ),
+    );
   }
 
   void _sendMessage() {

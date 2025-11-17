@@ -52,10 +52,31 @@ class ChatRepositoryImpl implements ChatRepositories {
     );
 
     await chatService.sendMessage(chatId, message.toMap());
+
+    // Increment unread count for the receiver
+    await chatService.incrementUnreadCount(chatId, receiverId);
   }
 
   @override
   Future<void> markMessageAsSeen(String messageId, String chatId) async {
     await chatService.markMessageAsSeen(chatId, messageId);
+  }
+
+  @override
+  Future<void> markAllMessagesAsRead(String userId, String peerId) async {
+    final chatId = chatService.getChatId(userId, peerId);
+    await chatService.markAllMessagesAsRead(chatId, userId);
+  }
+
+  @override
+  Future<void> incrementUnreadCount(String senderId, String receiverId) async {
+    final chatId = chatService.getChatId(senderId, receiverId);
+    await chatService.incrementUnreadCount(chatId, receiverId);
+  }
+
+  @override
+  Stream<int> getUnreadCount(String userId, String peerId) {
+    final chatId = chatService.getChatId(userId, peerId);
+    return chatService.getUnreadCountStream(chatId, userId);
   }
 }

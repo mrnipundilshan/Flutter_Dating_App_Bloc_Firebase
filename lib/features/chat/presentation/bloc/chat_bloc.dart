@@ -19,6 +19,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     on<MarkMessageSeenEvent>(_onMarkedMessageSeen);
 
+    on<MarkAllMessagesAsReadEvent>(_onMarkAllMessagesAsRead);
+
     on<_MessagesUpdatedEvent>(_onMessageUpdateEvent);
   }
 
@@ -64,6 +66,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  FutureOr<void> _onMarkAllMessagesAsRead(
+    MarkAllMessagesAsReadEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      await chatRepository.markAllMessagesAsRead(event.userId, event.peerId);
+    } catch (e) {
+      emit(ChatError("Failed to mark messages as read."));
+    }
+  }
+
   FutureOr<void> _onMessageUpdateEvent(
     _MessagesUpdatedEvent event,
     Emitter<ChatState> emit,
@@ -75,6 +88,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// This is used in the chat list to display message previews
   Stream<Message?> getLastMessage(String userId, String peerId) {
     return chatRepository.getLastMessage(userId, peerId);
+  }
+
+  /// Get unread count stream for a conversation
+  Stream<int> getUnreadCount(String userId, String peerId) {
+    return chatRepository.getUnreadCount(userId, peerId);
   }
 }
 
