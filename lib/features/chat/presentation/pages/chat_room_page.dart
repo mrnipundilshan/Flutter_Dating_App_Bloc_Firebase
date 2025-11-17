@@ -1,3 +1,4 @@
+import 'package:datingapp/core/components/timestamp_formatter.dart';
 import 'package:datingapp/features/auth/domain/entities/app_user.dart';
 import 'package:datingapp/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
@@ -133,19 +134,30 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             ? Alignment.centerRight
                             : Alignment.centerLeft,
 
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isMe ? Colors.pink : Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            msg.text,
-                            style: TextStyle(
-                              color: isMe ? Colors.white : Colors.black,
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isMe ? Colors.pink : Colors.grey[300],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                msg.text,
+                                style: TextStyle(
+                                  color: isMe ? Colors.white : Colors.black,
+                                ),
+                              ),
                             ),
-                          ),
+                            Text(
+                              TimestampFormatter.formatTimestamp(msg.timestamp),
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
