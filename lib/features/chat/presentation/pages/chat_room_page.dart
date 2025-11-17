@@ -21,6 +21,7 @@ class ChatRoomPage extends StatefulWidget {
 class _ChatRoomPageState extends State<ChatRoomPage> {
   final TextEditingController msgController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final Set<String> expandedMessageIds = {};
 
   @override
   void initState() {
@@ -128,36 +129,73 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     itemBuilder: (context, index) {
                       final msg = messages[index];
                       final isMe = msg.senderId == widget.currentUserId;
+                      final isExpanded = expandedMessageIds.contains(msg.id);
 
                       return Align(
                         alignment: isMe
                             ? Alignment.centerRight
                             : Alignment.centerLeft,
 
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              margin: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: isMe ? Colors.pink : Colors.grey[300],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                msg.text,
-                                style: TextStyle(
-                                  color: isMe ? Colors.white : Colors.black,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isExpanded) {
+                                  expandedMessageIds.remove(msg.id);
+                                } else {
+                                  expandedMessageIds.add(msg.id);
+                                }
+                              });
+                            },
+                            child: Column(
+                              crossAxisAlignment: isMe
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 7,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isMe
+                                        ? Colors.pink
+                                        : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    msg.text,
+                                    style: TextStyle(
+                                      color: isMe ? Colors.white : Colors.black,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: isExpanded
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
+                                          child: Text(
+                                            TimestampFormatter.formatTimestamp(
+                                              msg.timestamp,
+                                            ),
+                                            style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ),
+                              ],
                             ),
-                            Text(
-                              TimestampFormatter.formatTimestamp(msg.timestamp),
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     },
