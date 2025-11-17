@@ -7,7 +7,6 @@ import 'package:datingapp/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:datingapp/features/splash%20screen/splash_screen.dart';
 import 'package:datingapp/themes/bloc/theme_bloc.dart';
 import 'package:datingapp/themes/bloc/theme_state.dart';
-import 'package:datingapp/themes/dark_mode.dart';
 import 'package:datingapp/themes/light_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
