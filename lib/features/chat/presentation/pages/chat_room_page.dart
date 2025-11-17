@@ -1,5 +1,6 @@
 import 'package:datingapp/core/components/timestamp_formatter.dart';
 import 'package:datingapp/features/auth/domain/entities/app_user.dart';
+import 'package:datingapp/features/chat/domain/entities/message.dart';
 import 'package:datingapp/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,43 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   final TextEditingController msgController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final Set<String> expandedMessageIds = {};
+
+  Widget _buildSeenIcon(bool isSeen) {
+    return Icon(
+      isSeen ? Icons.done_all : Icons.done,
+      size: 16,
+      color: isSeen ? Colors.pink : Colors.grey[500],
+    );
+  }
+
+  Widget _buildMessageMeta({
+    required Message msg,
+    required bool isMe,
+    required bool isExpanded,
+  }) {
+    final showTimestamp = isExpanded;
+    final timestampText = TimestampFormatter.formatTimestamp(msg.timestamp);
+
+    if (!showTimestamp && !isMe) {
+      return const SizedBox();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (showTimestamp)
+            Text(
+              timestampText,
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            ),
+          if (showTimestamp && isMe) const SizedBox(width: 6),
+          if (isMe) _buildSeenIcon(msg.isSeen),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -198,24 +236,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                       ),
                                     ),
                                   ),
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 200),
-                                    child: isExpanded
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 4,
-                                            ),
-                                            child: Text(
-                                              TimestampFormatter.formatTimestamp(
-                                                msg.timestamp,
-                                              ),
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(),
+                                  _buildMessageMeta(
+                                    msg: msg,
+                                    isMe: isMe,
+                                    isExpanded: isExpanded,
                                   ),
                                 ],
                               ),

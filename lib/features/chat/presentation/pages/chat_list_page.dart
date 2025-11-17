@@ -24,11 +24,88 @@ class ChatListPage extends StatelessWidget {
     return isSentByMe ? "You: ${message.text}" : message.text;
   }
 
+  Widget? _buildStatusIcon(Message? message, String currentUserId) {
+    if (message == null || message.senderId != currentUserId) {
+      return null;
+    }
+    final isSeen = message.isSeen;
+    return Icon(
+      isSeen ? Icons.done_all : Icons.done,
+      size: 18,
+      color: isSeen ? Colors.pink : Colors.grey[500],
+    );
+  }
+
   String _truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
       return text;
     }
     return "${text.substring(0, maxLength)}...";
+  }
+
+  Widget _buildTrailingMeta({
+    required Message? message,
+    required int unreadCount,
+    required String currentUserId,
+  }) {
+    final timestampText = message != null
+        ? TimestampFormatter.formatTimestamp(message.timestamp)
+        : "";
+    final statusIcon = _buildStatusIcon(message, currentUserId);
+    final children = <Widget>[];
+
+    if (timestampText.isNotEmpty) {
+      children.add(
+        Text(
+          timestampText,
+          style: TextStyle(
+            fontSize: 12,
+            color: unreadCount > 0 ? Colors.pink : Colors.grey[500],
+            fontWeight: unreadCount > 0 ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
+      );
+    }
+
+    if (statusIcon != null) {
+      if (children.isNotEmpty) {
+        children.add(const SizedBox(height: 6));
+      }
+      children.add(statusIcon);
+    }
+
+    if (unreadCount > 0) {
+      if (children.isNotEmpty) {
+        children.add(const SizedBox(height: 8));
+      }
+      children.add(
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: const BoxDecoration(
+            color: Colors.pink,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            unreadCount > 99 ? '99+' : unreadCount.toString(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (children.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: children,
+    );
   }
 
   @override
@@ -64,9 +141,6 @@ class ChatListPage extends StatelessWidget {
               final message = messageSnapshot.data;
               final previewText = _getPreviewText(message, currentUserId);
               final displayText = _truncateText(previewText, 40);
-              final timestampText = message != null
-                  ? TimestampFormatter.formatTimestamp(message.timestamp)
-                  : "";
 
               return StreamBuilder<int>(
                 stream: unreadCountStream,
@@ -108,40 +182,13 @@ class ChatListPage extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (timestampText.isNotEmpty) ...[
-                          const SizedBox(width: 8),
-                          Text(
-                            timestampText,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: unreadCount > 0
-                                  ? Colors.pink
-                                  : Colors.grey[500],
-                              fontWeight: unreadCount > 0
-                                  ? FontWeight.w600
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ],
                       ],
                     ),
-                    trailing: unreadCount > 0
-                        ? Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: Colors.pink,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              unreadCount > 99 ? '99+' : unreadCount.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : null,
+                    trailing: _buildTrailingMeta(
+                      message: message,
+                      unreadCount: unreadCount,
+                      currentUserId: currentUserId,
+                    ),
                     onTap: () {
                       Navigator.push(
                         context,
