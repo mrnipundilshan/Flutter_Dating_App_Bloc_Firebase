@@ -74,166 +74,191 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: const AssetImage("assets/profile.png"),
-            ),
-            const SizedBox(width: 10),
-            Text(widget.peerUser.name),
-          ],
+    return BlocListener<ChatBloc, ChatState>(
+      listenWhen: (previous, current) => current is ChatLoaded,
+      listener: (context, state) {
+        if (state is! ChatLoaded) return;
+        final hasUnreadForMe = state.messages.any(
+          (msg) =>
+              msg.receiverId == widget.currentUserId && msg.isSeen == false,
+        );
+        if (!hasUnreadForMe) return;
+        context.read<ChatBloc>().add(
+          MarkAllMessagesAsReadEvent(
+            userId: widget.currentUserId,
+            peerId: widget.peerUser.uid,
+          ),
+        );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: const AssetImage("assets/profile.png"),
+              ),
+              const SizedBox(width: 10),
+              Text(widget.peerUser.name),
+            ],
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: BlocBuilder<ChatBloc, ChatState>(
-              builder: (context, state) {
-                if (state is ChatLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state is ChatLoaded) {
-                  final messages = state.messages;
-
-                  if (messages.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chat_bubble_outline,
-                            size: 60,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(height: 15),
-                          const Text(
-                            "No messages yet",
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            "Start the conversation!",
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    );
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<ChatBloc, ChatState>(
+                builder: (context, state) {
+                  if (state is ChatLoading) {
+                    return const Center(child: CircularProgressIndicator());
                   }
+                  if (state is ChatLoaded) {
+                    final messages = state.messages;
 
-                  return ListView.builder(
-                    controller: scrollController,
-                    reverse: true,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final msg = messages[index];
-                      final isMe = msg.senderId == widget.currentUserId;
-                      final isExpanded = expandedMessageIds.contains(msg.id);
-
-                      return Align(
-                        alignment: isMe
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 6,
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isExpanded) {
-                                  expandedMessageIds.remove(msg.id);
-                                } else {
-                                  expandedMessageIds.add(msg.id);
-                                }
-                              });
-                            },
-                            child: Column(
-                              crossAxisAlignment: isMe
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 7,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: isMe
-                                        ? Colors.pink
-                                        : Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    msg.text,
-                                    style: TextStyle(
-                                      color: isMe ? Colors.white : Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 200),
-                                  child: isExpanded
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 4,
-                                          ),
-                                          child: Text(
-                                            TimestampFormatter.formatTimestamp(
-                                              msg.timestamp,
-                                            ),
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(),
-                                ),
-                              ],
+                    if (messages.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat_bubble_outline,
+                              size: 60,
+                              color: Colors.grey,
                             ),
-                          ),
+                            const SizedBox(height: 15),
+                            const Text(
+                              "No messages yet",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              "Start the conversation!",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       );
-                    },
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          ),
+                    }
 
-          // Message Input
-          SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: msgController,
-                      decoration: InputDecoration(
-                        hintText: "Type a message...",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18),
+                    return ListView.builder(
+                      controller: scrollController,
+                      reverse: true,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final msg = messages[index];
+                        final isMe = msg.senderId == widget.currentUserId;
+                        final isExpanded = expandedMessageIds.contains(msg.id);
+
+                        return Align(
+                          alignment: isMe
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 6,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (isExpanded) {
+                                    expandedMessageIds.remove(msg.id);
+                                  } else {
+                                    expandedMessageIds.add(msg.id);
+                                  }
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: isMe
+                                    ? CrossAxisAlignment.end
+                                    : CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isMe
+                                          ? Colors.pink
+                                          : Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      msg.text,
+                                      style: TextStyle(
+                                        color: isMe
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 200),
+                                    child: isExpanded
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 4,
+                                            ),
+                                            child: Text(
+                                              TimestampFormatter.formatTimestamp(
+                                                msg.timestamp,
+                                              ),
+                                              style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
+
+            // Message Input
+            SafeArea(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: msgController,
+                        decoration: InputDecoration(
+                          hintText: "Type a message...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
+                    const SizedBox(width: 8),
 
-                  IconButton(
-                    onPressed: _sendMessage,
-                    icon: const Icon(Icons.send, color: Colors.pink),
-                  ),
-                ],
+                    IconButton(
+                      onPressed: _sendMessage,
+                      icon: const Icon(Icons.send, color: Colors.pink),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
