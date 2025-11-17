@@ -17,6 +17,18 @@ class ChatService {
         .snapshots();
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessageStream(
+    String chatId,
+  ) {
+    return firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots();
+  }
+
   Future<void> sendMessage(String chatId, Map<String, dynamic> message) async {
     await firestore
         .collection('chats')

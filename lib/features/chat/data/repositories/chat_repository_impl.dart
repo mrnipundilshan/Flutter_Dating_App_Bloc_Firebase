@@ -22,6 +22,19 @@ class ChatRepositoryImpl implements ChatRepositories {
   }
 
   @override
+  Stream<Message?> getLastMessage(String userId, String peerId) {
+    final chatId = chatService.getChatId(userId, peerId);
+
+    return chatService.getLastMessageStream(chatId).map((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        return null;
+      }
+      final doc = snapshot.docs.first;
+      return MessageModel.fromFireStore(doc.data(), doc.id);
+    });
+  }
+
+  @override
   Future<void> sendMessage(
     String senderId,
     String receiverId,

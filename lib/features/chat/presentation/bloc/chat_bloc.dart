@@ -70,6 +70,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) {
     emit(ChatLoaded(event.messages));
   }
+
+  /// Get the last message stream for a conversation
+  /// This is used in the chat list to display message previews
+  Stream<Message?> getLastMessage(String userId, String peerId) {
+    return chatRepository.getLastMessage(userId, peerId);
+  }
 }
 
 // private internal event

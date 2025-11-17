@@ -1,6 +1,9 @@
 import 'package:datingapp/features/auth/domain/entities/app_user.dart';
+import 'package:datingapp/features/chat/domain/entities/message.dart';
+import 'package:datingapp/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:datingapp/features/chat/presentation/pages/chat_room_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatListPage extends StatelessWidget {
   final List<AppUser> users;
@@ -11,6 +14,61 @@ class ChatListPage extends StatelessWidget {
     required this.users,
     required this.currentUserId,
   });
+
+  String _getPreviewText(Message? message, String currentUserId) {
+    if (message == null) {
+      return "No messages yet";
+    }
+    final isSentByMe = message.senderId == currentUserId;
+    return isSentByMe ? "You: ${message.text}" : message.text;
+  }
+
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inDays == 0) {
+      if (difference.inHours == 0) {
+        if (difference.inMinutes == 0) {
+          return "Just now";
+        }
+        return "${difference.inMinutes}m ago";
+      }
+      return "${difference.inHours}h ago";
+    } else if (difference.inDays == 1) {
+      return "Yesterday";
+    } else if (difference.inDays < 7) {
+      return "${difference.inDays}d ago";
+    } else {
+      // Format as date: "MMM dd" or "MMM dd, yyyy" if different year
+      final months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+      if (timestamp.year == now.year) {
+        return "${months[timestamp.month - 1]} ${timestamp.day}";
+      } else {
+        return "${months[timestamp.month - 1]} ${timestamp.day}, ${timestamp.year}";
+      }
+    }
+  }
+
+  String _truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return "${text.substring(0, maxLength)}...";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +86,69 @@ class ChatListPage extends StatelessWidget {
 
           if (user.uid == currentUserId) return const SizedBox();
 
-          return ListTile(
-            contentPadding: EdgeInsets.only(bottom: 10, left: 20),
-            leading: CircleAvatar(
-              radius: 25,
-              backgroundImage: const AssetImage("assets/profile.png"),
-            ),
-            title: Text(
-              user.name,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChatRoomPage(
-                    currentUserId: currentUserId,
-                    peerUser: user,
+          final chatBloc = context.read<ChatBloc>();
+          final lastMessageStream = chatBloc.getLastMessage(
+            currentUserId,
+            user.uid,
+          );
+
+          return StreamBuilder(
+            stream: lastMessageStream,
+            builder: (context, snapshot) {
+              final message = snapshot.data;
+              final previewText = _getPreviewText(message, currentUserId);
+              final displayText = _truncateText(previewText, 40);
+              final timestampText = message != null
+                  ? _formatTimestamp(message.timestamp)
+                  : "";
+
+              return ListTile(
+                contentPadding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 20,
+                  right: 20,
+                ),
+                leading: const CircleAvatar(
+                  radius: 25,
+                  backgroundImage: AssetImage("assets/profile.png"),
+                ),
+                title: Text(
+                  user.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        displayText,
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (timestampText.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        timestampText,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                      ),
+                    ],
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ChatRoomPage(
+                        currentUserId: currentUserId,
+                        peerUser: user,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
